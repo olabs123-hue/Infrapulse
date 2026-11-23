@@ -92,7 +92,7 @@ cd frontend && npm run build
 
 A multi-stage [Dockerfile](Dockerfile) builds the React dashboard and serves the generated assets alongside FastAPI on one origin. See [deployment and security notes](DEPLOYMENT.md).
 
-**Deployment status:** Docker build has been added to CI, but a successful frontend or image build has not yet been independently confirmed. No public InfraPulse service is deployed. Public containers should leave the ingestion secret unset so all writes fail closed.
+**Deployment status:** Docker and frontend build checks have been configured in GitHub Actions but have not yet been independently confirmed successful. Backend tests have passed locally (4 tests). No public InfraPulse service is deployed. Public containers should leave the ingestion secret unset so all writes fail closed.
 
 ## Current limitations
 
