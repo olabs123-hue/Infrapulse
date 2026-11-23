@@ -92,7 +92,7 @@ cd frontend && npm run build
 
 A multi-stage [Dockerfile](Dockerfile) builds the React dashboard and serves the generated assets alongside FastAPI on one origin. See [deployment and security notes](DEPLOYMENT.md).
 
-**Deployment status:** Docker and frontend build checks have been configured in GitHub Actions but have not yet been independently confirmed successful. Backend tests have passed locally (4 tests). No public InfraPulse service is deployed. Public containers should leave the ingestion secret unset so all writes fail closed.
+**Deployment status:** The read-only Docker image, including the React production build, deployed successfully to Render on 23 November 2026. [View the live dashboard](https://infrapulse-readonly-olabs123.onrender.com). Backend tests passed locally (4 tests). The live instance has no ingestion token and cannot accept metric writes; its ephemeral SQLite data starts empty.
 
 ## Current limitations
 
