@@ -41,3 +41,16 @@ def test_missing_and_bad_samples(client):
     assert client.post('/api/services/55/samples',headers=H,json={"ok":True,"latency_ms":-2}).status_code==422
     assert client.get('/api/services/55/samples').status_code==404
     assert client.get('/api/services').json()==[]
+
+
+def test_read_only_public_mode(tmp_path, monkeypatch):
+    """Without an ingestion token, the public demo must reject all writes."""
+    monkeypatch.setenv("INFRAPULSE_DB", str(tmp_path / "public.sqlite"))
+    monkeypatch.delenv("INFRAPULSE_INGEST_TOKEN", raising=False)
+    import backend.app as module
+    module = importlib.reload(module)
+    with TestClient(module.app) as demo:
+        assert demo.get("/health").status_code == 200
+        assert demo.get("/api/summary").json() == {"services": 0, "healthy": 0, "open_alerts": 0, "samples": 0}
+        assert demo.post("/api/services", headers={"X-Ingest-Token": "anything"}, json={"name": "Unsafe"}).status_code == 401
+        assert demo.post("/api/services/1/samples", headers={"X-Ingest-Token": "anything"}, json={"ok": True, "latency_ms": 10}).status_code == 401
